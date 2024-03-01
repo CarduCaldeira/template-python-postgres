@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "source"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+packages = [{include = "source"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+psycopg2 = "^2.9.9"
+python-dotenv = "^1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.0.2"
+pytest-cov = "^4.1.0"
+isort = "^5.13.2"
+bandit = "^1.7.7"
+blue = "^0.9.1"
+mkdocs = "^1.5.3"
+taskipy = "^1.12.2"
+pymdown-extensions = "^10.7"
+mkdocs-material = "^9.5.11"
+mkdocstrings = {extras = ["python"], version = "^0.24.0"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

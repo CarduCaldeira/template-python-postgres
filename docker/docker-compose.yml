@@ -1,0 +1,72 @@
+version: "3.8"
+services:
+  db:
+    image: postgres
+    container_name: local_pgdb_app
+    restart: always
+    env_file: ./.env
+    ports:
+      - "5434:${DB_PORT}"
+    environment:
+      POSTGRES_DB: ${DB_NAME} #banco que sera inicializado
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./../data/pgdata:/var/lib/postgresql/data/pgdata # onde é salvo o banco
+      #- ./files:/home #no caso de precisar dar carga a partir de csv por exemplo colcar em files/
+      - ./../data/start.sql:/docker-entrypoint-initdb.d/start.sql #script que sera executado quando o container for executado
+    networks:
+      - pg_network
+      
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container_app
+    restart: always
+    env_file: ./.env
+    ports:
+      - "8889:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+    volumes:
+      - ./../data/pgadmin:/var/lib/pgadmin
+    networks:
+      - pg_network
+    user: "${UID}:${GID}" 
+    
+  python-project:
+    depends_on:
+      - db
+    image: template-python
+    container_name: template-python_app
+    hostname: docker
+    tty: true
+    command: ["/bin/bash"]
+    build:
+      context: .
+      args:
+        GROUP_ID: 1000
+        USER_ID: 1000
+        USER_NAME: myuser
+        WORK_DIR:  /home/myuser/PROJECT
+    env_file:
+      - ./.env
+    volumes:
+      - type: bind
+        source: ./..
+        target: /home/myuser/PROJECT
+      - type: bind
+        source: ./../ignorefolder
+        target: /home/myuser/PROJECT/data
+    networks:
+      - pg_network
+  
+networks:
+  pg_network:
+    driver: bridge
+  
+  #docker exec -it local_pgdb psql -U user-name -d postgres
+  
+  #./pgadmin/storage/user-name_domain-name.com/
+
