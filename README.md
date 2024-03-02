@@ -15,6 +15,6 @@ DB_PORT="5432"
 
 Para executar 
 ```
-docker compose -f docker/docker-compose.yml up
-docker compose -f  docker/docker-compose.yml python-project bash 
+docker compose -f docker/docker-compose.yml up -d
+docker compose -f  docker/docker-compose.yml exec python-project bash 
 ```
