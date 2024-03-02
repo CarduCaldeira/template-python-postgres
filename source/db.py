@@ -11,8 +11,6 @@ def create_database():
     cursor = connection.cursor()
     print('PostgreSQL database version: ')
         
-    connection.autocommit = True  # Define a conexão para autocommit para permitir a criação do banco de dados
-
     try:
         # Insere um registro na tabela
         cursor.execute("CREATE TABLE t1 (id int)")
@@ -26,7 +24,6 @@ def create_database():
     except psycopg2.Error as e:
         print("Erro ao inserir o registro:", e)
     finally:
-        # Feche o cursor e a conexão
         if cursor:
             cursor.close()
         if connection:
