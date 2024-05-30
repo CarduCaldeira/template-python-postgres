@@ -1,0 +1,19 @@
+site_name: Extração de dados
+repo_url: https://github.com/CarduCaldeira/template-python-postgres
+docs_dir: docs/
+theme:
+  name: material
+  language: pt-BR
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [source]
+
+markdown_extensions:
+  - pymdownx.tasklist  # Lista de tarefas
+  - pymdownx.emoji  # Emojis
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.highlight

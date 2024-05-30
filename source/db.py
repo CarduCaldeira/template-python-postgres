@@ -1,33 +1,38 @@
-import psycopg2
-from config import config
+from typing import List, Tuple
 
-def create_database():
-    
+import psycopg2
+
+from source.config import config
+
+
+def create_database_connection():
+
     params = config()
     print('Connecting to the postgreSQL database ...')
     connection = psycopg2.connect(**params)
 
-    # create a cursor
+    return connection
+
+def insert_list_database(data_list: List[Tuple]):
+     
+    connection = create_database_connection()
     cursor = connection.cursor()
-    print('PostgreSQL database version: ')
-        
-    try:
-        # Insere um registro na tabela
-        cursor.execute("CREATE TABLE t1 (id int)")
-        cursor.execute("INSERT INTO t1 (id) VALUES (5)")
+    inserted_ids = []
 
-        # Commit da transação
-        connection.commit()
+    for data in data_list:
+        cursor.execute("""
+            INSERT INTO raw_db.news (
+                author, title, description, url, image_url, publication_date,
+                content, tags, source, query0, query1, query2
+            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
+        RETURNING id;
+        """, data)
+        inserted_id = cursor.fetchone()[0]
+        inserted_ids.append(inserted_id)
 
-        print("Registro inserido com sucesso!")
+    connection.commit()
 
-    except psycopg2.Error as e:
-        print("Erro ao inserir o registro:", e)
-    finally:
-        if cursor:
-            cursor.close()
-        if connection:
-            connection.close()
+    cursor.close()
+    connection.close()
 
-if __name__ == "__main__":
-    create_database()
+    return inserted_ids

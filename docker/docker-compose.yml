@@ -1,17 +1,15 @@
-version: "3.8"
 services:
   db:
     image: postgres
-    container_name: local_pgdb_app
-    restart: always
+    container_name: postgres_container_app
+    restart: unless-stopped
     env_file: ./.env
     ports:
-      - "5434:${DB_PORT}"
+      - "5432:5432"
     environment:
-      POSTGRES_DB: ${DB_NAME} #banco que sera inicializado
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      PGDATA: /var/lib/postgresql/data/pgdata
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - PGDATA=./var/lib/postgresql/data/pgdata
     volumes:
       - ./../data/pgdata:/var/lib/postgresql/data/pgdata # onde é salvo o banco
       #- ./files:/home #no caso de precisar dar carga a partir de csv por exemplo colcar em files/
@@ -25,29 +23,29 @@ services:
     restart: always
     env_file: ./.env
     ports:
-      - "8889:80"
+      - "8891:0080"
     environment:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
       - ./../data/pgadmin:/var/lib/pgadmin
+    user: "${UID}:${GID}" 
     networks:
       - pg_network
-    user: "${UID}:${GID}" 
     
   python-project:
     depends_on:
       - db
-    image: template-python
-    container_name: template-python_app
+    image: poetry_image
+    container_name: poetry_container_app
     hostname: docker
     tty: true
     command: ["/bin/bash"]
     build:
       context: .
       args:
-        GROUP_ID: 1000
-        USER_ID: 1000
+        GROUP_ID: 1001
+        USER_ID: 1001
         USER_NAME: myuser
         WORK_DIR:  /home/myuser/PROJECT
     env_file:
@@ -59,6 +57,8 @@ services:
       - type: bind
         source: ./../ignorefolder
         target: /home/myuser/PROJECT/data
+    ports:
+      - "8000:8000"
     networks:
       - pg_network
   

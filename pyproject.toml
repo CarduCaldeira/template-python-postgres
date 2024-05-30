@@ -7,21 +7,48 @@ readme = "README.md"
 packages = [{include = "source"}]
 
 [tool.poetry.dependencies]
-python = "^3.10"
-psycopg2 = "^2.9.9"
+python = "^3.11"
 python-dotenv = "^1.0.1"
+psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.0.2"
 pytest-cov = "^4.1.0"
-isort = "^5.13.2"
 bandit = "^1.7.7"
-blue = "^0.9.1"
-mkdocs = "^1.5.3"
 taskipy = "^1.12.2"
+ipython = "^8.24.0"
+faker = "^25.2.0"
+ruff = "^0.4.6"
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.5.3"
 pymdown-extensions = "^10.7"
 mkdocs-material = "^9.5.11"
 mkdocstrings = {extras = ["python"], version = "^0.24.0"}
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "--doctest-modules"
+markers = [
+    "db: mark a test for database"
+]
+
+[tool.ruff]
+line-length = 79  
+
+
+[tool.ruff.lint]
+
+select = [
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "UP",  # pyupgrade,
+  "I",   # isort
+]
+
+[tool.taskipy.tasks]
+docs = "mkdocs serve -a 0.0.0.0:8000"
+test = "pytest -s -x --cov=source -vv"
 
 [build-system]
 requires = ["poetry-core"]
