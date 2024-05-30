@@ -17,17 +17,18 @@ COPY --from=install-poetry ./install-poetry.py ./
 RUN python ./install-poetry.py \
     && rm ./install-poetry.py
 
-ARG GROUP_ID=1001
-ARG USER_ID=1001
 ARG USER_NAME=myuser
 ARG WORK_DIR=/home/$USER_NAME/PROJECT
+ARG GROUP_ID=1000
+ARG USER_ID=1000
 
 RUN apt-get update && apt-get install --yes --no-install-recommends git=1:2.30.* \
-    && rm -rf /var/lib/apt/lists/* \
-    && groupadd --gid $GROUP_ID $USER_NAME \
+    && rm -rf /var/lib/apt/lists/* 
+    
+RUN groupadd --gid $GROUP_ID grupo_user \
     && useradd --uid $USER_ID --gid $GROUP_ID --create-home $USER_NAME \
-    && mkdir --parents $WORK_DIR \
-    && chown -R $USER_NAME:$USER_NAME /home/$USER_NAME
+    && mkdir --parents $WORK_DIR  \
+    && chown -R $USER_NAME:grupo_user /home/$USER_NAME
 
 USER $USER_NAME
 WORKDIR $WORK_DIR

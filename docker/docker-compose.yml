@@ -44,8 +44,8 @@ services:
     build:
       context: .
       args:
-        GROUP_ID: 1001
-        USER_ID: 1001
+        GROUP_ID: ${GROUP_ID}
+        USER_ID: ${USER_ID}
         USER_NAME: myuser
         WORK_DIR:  /home/myuser/PROJECT
     env_file:
