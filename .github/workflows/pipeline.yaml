@@ -34,8 +34,7 @@ jobs:
 
       - name: Instalar dependências do projeto
         run: poetry install --without docs,dev
-        run: poetry install --without docs,dev
-
+       
       - name: Wait for PostgreSQL to be ready
         run: |
           until pg_isready -h localhost -p $DB_PORT; do
