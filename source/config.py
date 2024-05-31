@@ -1,12 +1,8 @@
 import os
 
-from dotenv import load_dotenv
-
 
 def config():
        
-    load_dotenv("./docker/.env")
-
     dict_param ={'dbname': os.getenv("DB_NAME"),
                 'user': os.getenv("DB_USER"),
                 'port': os.getenv("DB_PORT"),

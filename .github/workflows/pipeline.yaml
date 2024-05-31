@@ -5,6 +5,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:latest
+        ports:
+          - ${{ secrets.DB_PORT }}:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - name: Copia os arquivos do repo
         uses: actions/checkout@v3
@@ -19,12 +34,32 @@ jobs:
 
       - name: Instalar dependências do projeto
         run: poetry install --without docs,dev
+        run: poetry install --without docs,dev
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -p $DB_PORT; do
+            echo "Waiting for PostgreSQL to be ready..."
+            sleep 1
+          done
+
+      - name: Run setup SQL script
+        env:
+          PGPASSWORD: ${{ secrets.DB_PASSWORD }}
+        run: |
+          psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -p ${{ secrets.DB_PORT }} -f data/start.sql
+
 
       - name: Python test
+        env:
+          DB_NAME: ${{ secrets.DB_NAME }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: localhost
         run: poetry run pytest
 
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
-
