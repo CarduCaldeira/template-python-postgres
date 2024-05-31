@@ -18,7 +18,7 @@ jobs:
         run: pip install poetry
 
       - name: Instalar dependências do projeto
-        run: poetry install --without doc dev
+        run: poetry install --without docs,dev
 
       - name: Python test and coverage
         run: poetry pytest
