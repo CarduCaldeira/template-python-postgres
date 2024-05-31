@@ -48,7 +48,6 @@ jobs:
         run: |
           psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -p 5432 -f data/start.sql
 
-
       - name: Python test
         env:
           DB_NAME: ${{ secrets.DB_NAME }}
@@ -62,3 +61,4 @@ jobs:
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
+          REQUIREMENTS: requirements_docs.txt
