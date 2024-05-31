@@ -12,13 +12,15 @@ python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "^8.0.2"
-pytest-cov = "^4.1.0"
-bandit = "^1.7.7"
 taskipy = "^1.12.2"
 ipython = "^8.24.0"
-faker = "^25.2.0"
 ruff = "^0.4.6"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.0.2"
+pytest-cov = "^4.1.0"
+faker = "^25.2.0"
+bandit = "^1.7.7"
 
 [tool.poetry.group.docs.dependencies]
 mkdocs = "^1.5.3"
@@ -35,7 +37,6 @@ markers = [
 
 [tool.ruff]
 line-length = 79  
-
 
 [tool.ruff.lint]
 

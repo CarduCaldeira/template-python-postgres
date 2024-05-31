@@ -41,9 +41,14 @@ Para gerar a documentação automatica baseada nas docstrings, insira em docs/so
 ```
 Isso automantiacamente gerara uma documentação com as docstrings do modulo source/db.py 
 
-## PYTEST 
+## PYTEST e BANDIT
 
 No modulo tests/conftest.py são definidas as fixtures (funções de inicialização e encerramento de contexto para os testes). Como exemplo é testado a conexão com o banco de dados. O script test_app.py é adicionado como exemplo de uso do parametrize.
+
+Para  rodar o bandit
+```
+bandit -r .
+```
 
 ## IPYTHON
  
