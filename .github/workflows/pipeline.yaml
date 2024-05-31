@@ -20,8 +20,8 @@ jobs:
       - name: Instalar dependências do projeto
         run: poetry install --without docs,dev
 
-      - name: Python test and coverage
-        run: poetry pytest
+      - name: Python test
+        run: poetry run pytest
 
       - name: Deploy docs
         uses: mhausenblas/mkdocs-deploy-gh-pages@master
