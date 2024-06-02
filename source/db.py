@@ -5,7 +5,7 @@ import psycopg2
 from source.config import config
 
 
-def create_database_connection():
+def create_database_connection() -> psycopg2.extensions.connection:
 
     params = config()
     print('Connecting to the postgreSQL database ...')
@@ -13,26 +13,14 @@ def create_database_connection():
 
     return connection
 
-def insert_list_database(data_list: List[Tuple]):
+def insert_list_database(sql_query: str, data_list: List[Tuple]) -> None:
      
     connection = create_database_connection()
     cursor = connection.cursor()
-    inserted_ids = []
 
-    for data in data_list:
-        cursor.execute("""
-            INSERT INTO raw_db.news (
-                author, title, description, url, image_url, publication_date,
-                content, tags, source, query0, query1, query2
-            ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) 
-        RETURNING id;
-        """, data)
-        inserted_id = cursor.fetchone()[0]
-        inserted_ids.append(inserted_id)
+    cursor.executemany(sql_query, data_list)
 
     connection.commit()
 
     cursor.close()
     connection.close()
-
-    return inserted_ids

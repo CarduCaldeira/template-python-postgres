@@ -1,5 +1,7 @@
 import pytest
 from faker import Faker
+from typing import List, Tuple
+
 
 from source.db import create_database_connection
 
@@ -14,7 +16,7 @@ def db_connection():
 
 #scope = function inicializa create_fake_news para para cada função testado
 @pytest.fixture(scope='function')
-def create_fake_news():
+def create_fake_news() -> List[Tuple]:
 
     lists = []
     news = []

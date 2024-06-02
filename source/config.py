@@ -1,7 +1,8 @@
 import os
+from typing import Dict
 
 
-def config():
+def config() -> Dict[str,str]:
        
     dict_param ={'dbname': os.getenv("DB_NAME"),
                 'user': os.getenv("DB_USER"),
