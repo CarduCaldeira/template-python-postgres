@@ -4,13 +4,15 @@ def add(a:float, b:float) -> float:
     """
     Adiciona dois números e retorna o resultado.
 
-    Exemplo:
-    >>> add(2, 3)
-    5
-    >>> add(-1, 1)
-    0
-    >>> add(0, 0)
-    0
+    Examples:
+        >>> add(2, 3)
+        5
+
+        >>> add(-1, 1)
+        0
+
+        >>> add(0, 0)
+        0
 
     Args:
         a (float): Numero  a ser somado.
