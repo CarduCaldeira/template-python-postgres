@@ -9,7 +9,7 @@ jobs:
       postgres:
         image: postgres:latest
         ports:
-          - ${{ secrets.DB_PORT }}:5432
+          - 5432:5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -37,7 +37,7 @@ jobs:
        
       - name: Wait for PostgreSQL to be ready
         run: |
-          until pg_isready -h localhost -p ${{ secrets.DB_PORT }}; do
+          until pg_isready -h localhost -p 5432; do
             echo "Waiting for PostgreSQL to be ready..."
             sleep 1
           done
@@ -46,7 +46,7 @@ jobs:
         env:
           PGPASSWORD: ${{ secrets.DB_PASSWORD }}
         run: |
-          psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -p ${{ secrets.DB_PORT }} -f data/start.sql
+          psql -h localhost -U ${{ secrets.DB_USER }} -d ${{ secrets.DB_NAME }} -p 5432 -f data/start.sql
 
       - name: Python test
         env:
