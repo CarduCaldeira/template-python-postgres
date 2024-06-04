@@ -2,14 +2,17 @@ Este repositório tem como objetivo criar um ambiente de desenvolvimento em pyth
 
 Ao subir o postgres, o script data/start.sql será executado (só é executado a primeira vez que o container é executado, além disso, se já existir o database em que o script realiza as queries, o script é ignorado). 
 
-No arquivo docker/.env é inicializado os parâmetros necessários para construçao do container. Por exemplo
+No diretório docker/envs/ são configurados os parâmetros necessários para construçao de cada container. Para exeutar os containers, basta duplicar os arquivos removendo o ".example" da cada um deles. O diretório deve ficar com a seguinte estrutura
 
 ```
-DB_NAME="raw_data"
-DB_USER="user-name"
-DB_PASSWORD="strong-password"
-DB_HOST="db"
-DB_PORT="5432"
+  docker
+    envs
+      󰈚 db.env
+      󰈚 db.env.example
+      󰈚 pgadmin.env
+      󰈚 pgadmin.env.example
+      󰈚 python_project.env
+      󰈚 python_project.env.example
 ```
 
 ## DOCKER
@@ -17,7 +20,7 @@ DB_PORT="5432"
 Para executar o container
 ```
 docker compose -f docker/docker-compose.yml up -d
-docker compose -f  docker/docker-compose.yml exec python-project bash 
+docker compose -f docker/docker-compose.yml exec python-project bash 
 ```  
 Ou rode o script
 ```

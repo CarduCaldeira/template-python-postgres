@@ -3,13 +3,9 @@ services:
     image: postgres
     container_name: postgres_container_app
     restart: unless-stopped
-    env_file: ./.env
+    env_file: ./envs/db.env
     ports:
       - "5432:5432"
-    environment:
-      - POSTGRES_USER=${DB_USER}
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
-      - PGDATA=./var/lib/postgresql/data/pgdata
     volumes:
       - ./../data/pgdata:/var/lib/postgresql/data/pgdata # onde é salvo o banco
       #- ./files:/home #no caso de precisar dar carga a partir de csv por exemplo colcar em files/
@@ -21,12 +17,9 @@ services:
     image: dpage/pgadmin4
     container_name: pgadmin4_container_app
     restart: always
-    env_file: ./.env
+    env_file: ./envs/pgadmin.env
     ports:
       - "8891:0080"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
-      PGADMIN_DEFAULT_PASSWORD: strong-password
     volumes:
       - ./../data/pgadmin:/var/lib/pgadmin
     user: "${UID}:${GID}" 
@@ -48,8 +41,7 @@ services:
         USER_ID: ${USER_ID}
         USER_NAME: myuser
         WORK_DIR:  /home/myuser/PROJECT
-    env_file:
-      - ./.env
+    env_file: ./envs/python_project.env
     volumes:
       - type: bind
         source: ./..
